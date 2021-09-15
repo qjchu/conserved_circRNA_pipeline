@@ -79,7 +79,7 @@ done
 perl circ_full_length.pl circseqcup_res_updated/SRR1005257.1_output/SRR1005257.1_res circseqcup_res/Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa cirifull_res/SRR1005257.1_bsj/CIRI-full_output/SRR1005257.1_bsj_merge_circRNA_detail.anno circexplorer2_res/SRR1005257.1_denovo/circularRNA_full.txt SRR1005257.1
 ```
 
-batch processing
+batch processing:
 ```
 for id in SRR1005284.1 SRR1005320 SRR1005347.1 SRR1005258.1
 do 
@@ -88,14 +88,34 @@ do
 done
 ```
 
-combine results from different samples
+combine results from different samples:
 ```
 cat *_full_length.txt > all_osa_samples.txt
 perl circ_full_length_step2.pl all_osa_samples.txt all_circ_full_length_osa.txt
 ```
 
+7. Extract the full-length sequences of circRNAs
+```
+perl extract_circ_full_length_osa.pl all_circ_full_length_osa.txt all_circ_full_length_osa_seq.txt
+```
+
+Format of output file:
+```
+# >chr_start_end|circ_name|(total exons)_(exon number)_(exon start)-(exon end)
+>10_11629937_11630996|osa_circ_006625|2_1_11629937-11629955
+ACAGGTTAATGGCCTCTTG
+>10_11629937_11630996|osa_circ_006625|2_2_11630827-11630996
+CTGGCCATCAAAGTGAGCAACCAAAACAGTGGAAGAACCAGGAGAGTGCGCTTCATCTGCAGCCTTGGAAAGAACTTGTTCGGGTTTAATATCTGCAGCGCCTTGATTCTCCATAATGAACTTTTTACAACCATCCATTAGCTCCCTTGCATAAAGCCCTGCATTGATAC
+```
 
 ## Find similar circRNA sequences among different species
-MUMmer were used here.
+MUMmer were used in this section.
+
+1. Seclect suitable parameters
+```
+sh -v test_mummer_parameters.sh
+```
+
+2. Run MUMmer
 
 
