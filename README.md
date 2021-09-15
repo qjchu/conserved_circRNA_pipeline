@@ -13,7 +13,7 @@ perl 40311circ_2fold_seq.pl
 bowtie-build osa40311_genomic_seq_2fold.txt osa40311_genomic_seq_2fold
 
 # bowtie align and count
-for id in SRR1005257.1 SRR1005284.1 SRR1005320 SRR1005347.1 
+for id in SRR1005257.1
 do
   echo $id
   bowtie -p 8 --al bowtie_out/aligned_$id\.fq osa40311_genomic_seq_2fold -1 /public4/chuqj/raw_data/rice_ribozero_data/$id\_1_tri.fastq -2 /public4/chuqj/raw_data/rice_ribozero_data/$id\_2_tri.fastq > bowtie_out/$id\_to_osa40311circ_bowtieout.txt
@@ -26,6 +26,36 @@ done
 filterbyname.sh in=SRR1005257.1_1.fastq.gz in2=SRR1005257.1_2.fastq.gz out=SRR1005257.1_bsj_1.fastq out2=SRR1005257.1_bsj_2.fastq names=SRR1005257.1_to_osa40311circ_bowtieout.txt_reads_name.txt include=t
 ```
 5. Predict complete sequences of circRNAs based on CIRI-full (Zheng et al., 2019), CIRCexplorer2 (Zhang et al., 2016), or circseq_cup (Ye et al., 2017).
+* CIRI-full
+```
+# an example for predicting full-length sequences of circRNAs using CIRI-full
+# CIRI-full uses raw reads
+bwa index -a bwtsw Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
+java -jar CIRI-full_v2.0/CIRI-full.jar Pipeline -1 SRR1005257.1_bsj_1.fastq -2 SRR1005257.1_bsj_2.fastq -d cirifull_res/SRR1005257.1_bsj -o SRR1005257.1_bsj -r Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -a Oryza_sativa.IRGSP-1.0.38.gtf -t 2
+```
+* CIRCexplorer2
+```
+```
+* circseq_cup
+```
+# quality control of reads supporting back-splicing
+for id in SRR1005257.1
+do 
+  echo $id
+  fastp --thread=2 -i $id\_bsj_1.fastq -o $id\_bsj_1_tri.fastq -I $id\_bsj_2.fastq -O $id\_bsj_2_tri.fastq -j $id\_fastp.json -h $id\_fastp.html 2> $id\_fastp.txt
+done
+
+# an example for predicting full-length sequences of circRNAs using circseq_cup
+for id in SRR1005257.1
+do 
+  echo $id
+  perl assemble_cap3.pl $id # prepare files for circseq_cup
+  python assemble_cap3.py -o $id # assembly (python2.7)
+  python circ_anotation.py -g Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -c $id\_output/cap3_circ_res -p $id\_output/$id\_reads_num -o $id
+  perl circ_seq_statistics.pl $id\_output/$id\_res $id\_output/$id\_res_statistics.out
+done
+
+```
 
 ## Find similar circRNA sequences among different species
 MUMmer were used here.
