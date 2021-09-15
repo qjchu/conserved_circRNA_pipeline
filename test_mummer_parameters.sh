@@ -22,12 +22,13 @@ show-coords -T -q -H osai2osaj_v3_best.delta > osai2osaj_v3_best.txt
 
 # v4: --nosimplify
 nucmer --nosimplify --prefix=osai2osaj_v4 ../137_osaj_genomic_seq.txt /data2/chuqj/mummer/Oryza_indica.ASM465v1.dna.toplevel.fa
+show-coords -T -q -H osai2osaj_v4.delta > osai2osaj_v4_coord.txt
 delta-filter -1 osai2osaj_v4.delta > osai2osaj_v4_best.delta
 show-coords -T -q -H osai2osaj_v4_best.delta > osai2osaj_v4_best.txt
 
 # v5: --maxmatch -c 20 
 nucmer --maxmatch -c 20 --prefix=osai2osaj_v5 ../137_osaj_genomic_seq.txt /data2/chuqj/mummer/Oryza_indica.ASM465v1.dna.toplevel.fa
-show-coords -T -q -H osai2osaj_v5.delta > osai2osaj_v5_coord.txt
+show-coords -T -q -H osai2osaj_v5.delta > osai2osaj_v5_coord.txt  # for downstream analyze
 delta-filter -1 osai2osaj_v5.delta > osai2osaj_v5_best.delta
 show-coords -T -q -H osai2osaj_v5_best.delta > osai2osaj_v5_best.txt
 
