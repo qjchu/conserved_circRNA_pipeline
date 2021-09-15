@@ -20,7 +20,12 @@ do
   perl count_reads_from_bowtie_osa40311.pl bowtie_out/$id\_to_osa40311circ_bowtieout.txt
 done
 ```
-4.
+4. Extract sequences of reads supporting back-splicing site based on the names of reads using BBmap
+```
+# an example as following
+filterbyname.sh in=SRR1005257.1_1.fastq.gz in2=SRR1005257.1_2.fastq.gz out=SRR1005257.1_bsj_1.fastq out2=SRR1005257.1_bsj_2.fastq names=SRR1005257.1_to_osa40311circ_bowtieout.txt_reads_name.txt include=t
+```
+5. Predict complete sequences of circRNAs based on CIRI-full (Zheng et al., 2019), CIRCexplorer2 (Zhang et al., 2016), or circseq_cup (Ye et al., 2017).
 
 ## Find similar circRNA sequences among different species
 MUMmer were used here.
