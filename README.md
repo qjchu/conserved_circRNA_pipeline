@@ -117,5 +117,9 @@ sh -v test_mummer_parameters.sh
 ```
 
 2. Run MUMmer
+```
+sh -v mummer_osa_210712.sh
+```
 
-
+## Contact me
+This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn Any questions or suggestions, please feel free to contact me.
