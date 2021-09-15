@@ -1,2 +1,5 @@
 # conserved_circRNA_pipeline
-Pipelines for analysing the conservation of circRNAs
+Detailed pipelines for analysing the conservation of circRNAs
+
+## Find similar circRNA sequences among different species using MUMmer
+
