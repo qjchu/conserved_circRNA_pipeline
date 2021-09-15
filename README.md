@@ -33,6 +33,7 @@ filterbyname.sh in=SRR1005257.1_1.fastq.gz in2=SRR1005257.1_2.fastq.gz out=SRR10
 bwa index -a bwtsw Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
 java -jar CIRI-full_v2.0/CIRI-full.jar Pipeline -1 SRR1005257.1_bsj_1.fastq -2 SRR1005257.1_bsj_2.fastq -d cirifull_res/SRR1005257.1_bsj -o SRR1005257.1_bsj -r Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -a Oryza_sativa.IRGSP-1.0.38.gtf -t 2
 ```
+
 * CIRCexplorer2
 ```
 # build index
@@ -52,6 +53,7 @@ do
   CIRCexplorer2 denovo -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -g Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -b $id\_back_spliced_junction.bed -d $id\_assemble -o $id\_denovo
 done
 ```
+
 * circseq_cup
 ```
 # quality control of reads supporting back-splicing
@@ -62,16 +64,36 @@ do
 done
 
 # an example for predicting full-length sequences of circRNAs using circseq_cup
-# scripts assemble_cap3.py circ_anotation.py circ_seq_statistics.pl were included in packages of circseq_cup
 for id in SRR1005257.1
 do 
   echo $id
-  perl assemble_cap3.pl $id # prepare files for circseq_cup
-  python assemble_cap3.py -o $id # assembly (python2.7)
-  python circ_anotation.py -g Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -c $id\_output/cap3_circ_res -p $id\_output/$id\_reads_num -o $id
-  perl circ_seq_statistics.pl $id\_output/$id\_res $id\_output/$id\_res_statistics.out
+  # align
+  tophat2 -o $id\_tophat_fusion -p 10 --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search Oryza_sativa.IRGSP-1.0.dna.toplevel.fa bowtie_out/$id\_bsj_1_tri.fastq bowtie_out/$id\_bsj_2_tri.fastq
+  # run circseqcup
+  python RunMe.py -o $id -t tophat_fusion -f $id\_tophat_fusion -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -g Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa -1 bowtie_out/$id\_bsj_1_tri.fastq -2 bowtie_out/$id\_bsj_2_tri.fastq
 done
 ```
+
+6. Combine the results of three tools (CIRI-full, CIRCexplorer2, circseq_cup)
+```
+perl circ_full_length.pl circseqcup_res_updated/SRR1005257.1_output/SRR1005257.1_res circseqcup_res/Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa cirifull_res/SRR1005257.1_bsj/CIRI-full_output/SRR1005257.1_bsj_merge_circRNA_detail.anno circexplorer2_res/SRR1005257.1_denovo/circularRNA_full.txt SRR1005257.1
+```
+
+batch processing
+```
+for id in SRR1005284.1 SRR1005320 SRR1005347.1 SRR1005258.1
+do 
+  echo $id
+  perl circ_full_length.pl circseqcup_res_updated/$id\_output/$id\_res circseqcup_res/Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa cirifull_res/$id\_bsj/CIRI-full_output/$id\_bsj_merge_circRNA_detail.anno circexplorer2_res/$id\_denovo/circularRNA_full.txt $id osa40311_info_2019.txt
+done
+```
+
+combine results from different samples
+```
+cat *_full_length.txt > all_osa_samples.txt
+perl circ_full_length_step2.pl all_osa_samples.txt all_circ_full_length_osa.txt
+```
+
 
 ## Find similar circRNA sequences among different species
 MUMmer were used here.
