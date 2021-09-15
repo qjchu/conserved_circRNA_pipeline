@@ -35,6 +35,22 @@ java -jar CIRI-full_v2.0/CIRI-full.jar Pipeline -1 SRR1005257.1_bsj_1.fastq -2 S
 ```
 * CIRCexplorer2
 ```
+# build index
+bowtie-build Oryza_sativa.IRGSP-1.0.dna.toplevel.fa Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
+bowtie2-build Oryza_sativa.IRGSP-1.0.dna.toplevel.fa Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
+
+# run CIRCexplorer2
+for id in SRR1005257.1
+do
+  # align
+  CIRCexplorer2 align -G Oryza_sativa.IRGSP-1.0.38.gtf -i Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -j Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -f bowtie_out/$id\_bsj_1.fastq,bowtie_out/$id\_bsj_2.fastq -o $id\_alignment -b $id\_back_spliced_junction.bed
+  # annotate
+  CIRCexplorer2 annotate -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -g Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -b $id\_back_spliced_junction.bed -o $id\_circularRNA_known.txt
+  # assemble
+  CIRCexplorer2 assemble -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -m $id\_alignment/tophat -o $id\_assemble
+  # denovo
+  CIRCexplorer2 denovo -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -g Oryza_sativa.IRGSP-1.0.dna.toplevel.fa -b $id\_back_spliced_junction.bed -d $id\_assemble -o $id\_denovo
+done
 ```
 * circseq_cup
 ```
@@ -46,6 +62,7 @@ do
 done
 
 # an example for predicting full-length sequences of circRNAs using circseq_cup
+# scripts assemble_cap3.py circ_anotation.py circ_seq_statistics.pl were included in packages of circseq_cup
 for id in SRR1005257.1
 do 
   echo $id
@@ -54,7 +71,6 @@ do
   python circ_anotation.py -g Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa -r Oryza_sativa.IRGSP-1.0.38.gff3.new.GenePred -c $id\_output/cap3_circ_res -p $id\_output/$id\_reads_num -o $id
   perl circ_seq_statistics.pl $id\_output/$id\_res $id\_output/$id\_res_statistics.out
 done
-
 ```
 
 ## Find similar circRNA sequences among different species
