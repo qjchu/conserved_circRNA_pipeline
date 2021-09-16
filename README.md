@@ -121,5 +121,10 @@ sh -v test_mummer_parameters.sh
 sh -v mummer_osa_210712.sh
 ```
 
+3. Arrange the results of MUMmer, and extract circRNA transcript sequences from each species
+```
+```
+
 ## Contact me
-This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn Any questions or suggestions, please feel free to contact me.
+This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn
+Any questions or suggestions, please feel free to contact me.
