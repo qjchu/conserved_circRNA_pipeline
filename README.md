@@ -163,7 +163,33 @@ python -m jcvi.formats.base join oryza_sativa.chondrus_crispus.i1.blocks oryza_s
 ```
 
 ## Quantification of circRNA expression
-1. Creat sequences of 
+1. Creat sequences of circRNA transcripts based on ```(species name)_circ_seq.txt``` files (contain exon sequences of circRNAs)
+```bash
+for id in aegilops_tauschii_circ_seq.txt amborella_trichopoda_circ_seq.txt arabidopsis_lyrata_circ_seq.txt arabidopsis_thaliana_circ_seq.txt beta_vulgaris_circ_seq.txt brachypodium_distachyon_circ_seq.txt brassica_napus_circ_seq.txt brassica_oleracea_circ_seq.txt brassica_rapa_circ_seq.txt chlamydomonas_reinhardtii_circ_seq.txt chondrus_crispus_circ_seq.txt cucumis_sativus_circ_seq.txt cyanidioschyzon_merolae_circ_seq.txt galdieria_sulphuraria_circ_seq.txt glycine_max_circ_seq.txt gossypium_raimondii_circ_seq.txt helianthus_annuus_circ_seq.txt hordeum_vulgare_circ_seq.txt leersia_perrieri_circ_seq.txt lupinus_angustifolius_circ_seq.txt manihot_esculenta_circ_seq.txt medicago_truncatula_circ_seq.txt musa_acuminata_circ_seq.txt oryza_barthii_circ_seq.txt oryza_brachyantha_circ_seq.txt oryza_glaberrima_circ_seq.txt oryza_glumaepatula_circ_seq.txt oryza_longistaminata_circ_seq.txt oryza_meridionalis_circ_seq.txt oryza_punctata_circ_seq.txt oryza_rufipogon_circ_seq.txt oryza_sativa_circ_seq.txt ostreococcus_lucimarinus_circ_seq.txt phaseolus_vulgaris_circ_seq.txt physcomitrella_patens_circ_seq.txt populus_trichocarpa_circ_seq.txt prunus_persica_circ_seq.txt selaginella_moellendorffii_circ_seq.txt solanum_lycopersicum_circ_seq.txt solanum_tuberosum_circ_seq.txt sorghum_bicolor_circ_seq.txt theobroma_cacao_circ_seq.txt trifolium_pratense_circ_seq.txt triticum_aestivum_circ_seq.txt triticum_urartu_circ_seq.txt vitis_vinifera_circ_seq.txt zea_mays_circ_seq.txt
+do 
+  perl combine_circexons_each_species.pl $id
+done
+```
+
+2. Double the sequences of circRNA transcripts
+```bash
+perl /public4/chuqj/species_expression/circ_2fold_seq.pl oryza_sativa_circ_seq_trans.txt oryza_sativa_circ_seq_trans_2fold.txt
+```
+
+3. Aligned RNA-Seq datasets to 2-folded circRNA transcripts, and arrange results
+```bash
+# build index
+bowtie-build oryza_sativa_circ_seq_trans_2fold.txt oryza_sativa_circ_seq_trans_2fold
+
+# align
+for id in SRR1005257.1 SRR1005284.1 SRR1005320 SRR1005347.1 
+do 
+  echo $id
+  bowtie -p 8 --al aligned_$id\.fq oryza_sativa_circ_seq_trans_2fold -1 $id\_1_tri.fastq -2 $id\_2_tri.fastq > $id\_to_6519circ_bowtieout.txt
+  # arrange results
+  perl count_reads_from_bowtie.pl oryza_sativa_circ_seq_trans_2fold.txt $id\_to_6519circ_bowtieout.txt
+done
+```
 
 ## Contact me
 This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn
