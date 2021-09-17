@@ -163,7 +163,7 @@ python -m jcvi.formats.base join oryza_sativa.chondrus_crispus.i1.blocks oryza_s
 ```
 
 ## Quantification of circRNA expression
-1. 
+1. Creat sequences of 
 
 ## Contact me
 This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn
