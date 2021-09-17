@@ -142,6 +142,27 @@ perl afterMummer3_extract_seq_each_species.pl
 ```
 This script generates files named ```(species name)_circ_seq.txt```, which contain all circRNA sequences of one certain species. These files could be used for quantification of circRNA expression.
 
+## Find orthologous genes among different species
+MCScan were used in this section.
+
+1. Seclect suitable parameters
+```
+sh -v test_mcscan_parameters.sh
+```
+
+2. Run MCScan
+```
+sh -v mcscan_osaj_53species.sh
+```
+
+3. Arrange the results of MCScan
+```
+# combine blocks
+# results from 47 species
+python -m jcvi.formats.base join oryza_sativa.chondrus_crispus.i1.blocks oryza_sativa.galdieria_sulphuraria.i1.blocks oryza_sativa.cyanidioschyzon_merolae.i1.blocks oryza_sativa.ostreococcus_lucimarinus.i1.blocks oryza_sativa.chlamydomonas_reinhardtii.i1.blocks oryza_sativa.physcomitrella_patens.i1.blocks oryza_sativa.selaginella_moellendorffii.i1.blocks oryza_sativa.musa_acuminata.i1.blocks oryza_sativa.oryza_brachyantha.i1.blocks oryza_sativa.oryza_glaberrima.i1.blocks oryza_sativa.oryza_rufipogon.i1.blocks oryza_sativa.oryza_sativa.i1.blocks oryza_sativa.oryza_glumaepatula.i1.blocks oryza_sativa.oryza_barthii.i1.blocks oryza_sativa.oryza_longistaminata.i1.blocks oryza_sativa.oryza_meridionalis.i1.blocks oryza_sativa.oryza_punctata.i1.blocks oryza_sativa.leersia_perrieri.i1.blocks oryza_sativa.hordeum_vulgare.i1.blocks oryza_sativa.triticum_urartu.i1.blocks oryza_sativa.triticum_aestivum.i1.blocks oryza_sativa.aegilops_tauschii.i1.blocks oryza_sativa.brachypodium_distachyon.i1.blocks oryza_sativa.sorghum_bicolor.i1.blocks oryza_sativa.zea_mays.i1.blocks oryza_sativa.vitis_vinifera.i1.blocks oryza_sativa.gossypium_raimondii.i1.blocks oryza_sativa.theobroma_cacao.i1.blocks oryza_sativa.arabidopsis_thaliana.i1.blocks oryza_sativa.arabidopsis_lyrata.i1.blocks oryza_sativa.brassica_rapa.i1.blocks oryza_sativa.brassica_oleracea.i1.blocks oryza_sativa.brassica_napus.i1.blocks oryza_sativa.cucumis_sativus.i1.blocks oryza_sativa.lupinus_angustifolius.i1.blocks oryza_sativa.glycine_max.i1.blocks oryza_sativa.phaseolus_vulgaris.i1.blocks oryza_sativa.medicago_truncatula.i1.blocks oryza_sativa.trifolium_pratense.i1.blocks oryza_sativa.prunus_persica.i1.blocks oryza_sativa.manihot_esculenta.i1.blocks oryza_sativa.populus_trichocarpa.i1.blocks oryza_sativa.beta_vulgaris.i1.blocks oryza_sativa.helianthus_annuus.i1.blocks oryza_sativa.solanum_tuberosum.i1.blocks oryza_sativa.solanum_lycopersicum.i1.blocks oryza_sativa.amborella_trichopoda.i1.blocks --noheader | cut -f1,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96 > 47_species.i1.blocks
+```
+
+
 ## Contact me
 This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn
 Any questions or suggestions, please feel free to contact me.
