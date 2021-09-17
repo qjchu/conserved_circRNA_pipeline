@@ -120,10 +120,27 @@ sh -v test_mummer_parameters.sh
 ```
 sh -v mummer_osa_210712.sh
 ```
+files named as ```**2osaj_coord.txt``` will be used for downstream analysis.
 
 3. Arrange the results of MUMmer, and extract circRNA transcript sequences from each species
 ```
+# extract best hit of circRNAs based on the results of MUMmer
+# example of four plant species
+for id in hordeum_vulgare triticum_aestivum zea_mays arabidopsis_thaliana; do perl afterMummer0_best_coord_osa.pl $id; done
 ```
+```
+# arrange orthologous positions of circRNAs in different species, and extract the length identity of mapped sequences
+perl afterMummer1_arrange_osa.pl
+```
+```
+# extract the corresponding orthologous circRNA sequences from different species
+perl afterMummer2_extract_genome_seq_osa40311circs.pl
+```
+This script generates files named ```seq_name.fasta```, which contain orthologous sequences of one circRNA in differernt species. These files could be used for multiple sequences alignments by MAFFT.
+```
+perl afterMummer3_extract_seq_each_species.pl
+```
+This script generates files named ```(species name)_circ_seq.txt```, which contain all circRNA sequences of one certain species. These files could be used for quantification of circRNA expression.
 
 ## Contact me
 This pipeline is developed and maintained by Qinjie Chu: qinjiechu@zju.edu.cn
