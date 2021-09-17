@@ -1,6 +1,5 @@
 # conserved_circRNA_pipeline
-Detailed pipelines for analysing the conservation of circRNAs
-<br>
+Detailed pipelines for analysing the conservation of circRNAs.
 
 ## Assembly of full-length circRNAs
 1. Download rice circRNAs with back-splicing information form PlantcircBase (http://ibi.zju.edu.cn/plantcircbase/).
@@ -36,7 +35,7 @@ java -jar CIRI-full_v2.0/CIRI-full.jar Pipeline -1 SRR1005257.1_bsj_1.fastq -2 S
 ```
 
 * CIRCexplorer2
-```
+```bash
 # build index
 bowtie-build Oryza_sativa.IRGSP-1.0.dna.toplevel.fa Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
 bowtie2-build Oryza_sativa.IRGSP-1.0.dna.toplevel.fa Oryza_sativa.IRGSP-1.0.dna.toplevel.fa
@@ -56,7 +55,7 @@ done
 ```
 
 * circseq_cup
-```
+```bash
 # quality control of reads supporting back-splicing
 for id in SRR1005257.1
 do 
@@ -76,12 +75,12 @@ done
 ```
 
 6. Combine the results of three tools (CIRI-full, CIRCexplorer2, circseq_cup)
-```
+```bash
 perl circ_full_length.pl circseqcup_res_updated/SRR1005257.1_output/SRR1005257.1_res circseqcup_res/Oryza_sativa.IRGSP-1.0.dna.toplevel.chrname.fa cirifull_res/SRR1005257.1_bsj/CIRI-full_output/SRR1005257.1_bsj_merge_circRNA_detail.anno circexplorer2_res/SRR1005257.1_denovo/circularRNA_full.txt SRR1005257.1
 ```
 
 batch processing:
-```
+```bash
 for id in SRR1005284.1 SRR1005320 SRR1005347.1 SRR1005258.1
 do 
   echo $id
@@ -90,13 +89,13 @@ done
 ```
 
 combine results from different samples:
-```
+```bash
 cat *_full_length.txt > all_osa_samples.txt
 perl circ_full_length_step2.pl all_osa_samples.txt all_circ_full_length_osa.txt
 ```
 
 7. Extract the full-length sequences of circRNAs
-```
+```bash
 perl extract_circ_full_length_osa.pl all_circ_full_length_osa.txt all_circ_full_length_osa_seq.txt
 ```
 
